@@ -19,11 +19,71 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     pdfmetrics.registerFont(TTFont('times','times.ttf'))
     pdfmetrics.registerFont(TTFont('timesbd', 'timesbd.ttf'))
 
-    c = canvas.Canvas(packet, landscape(letter))
+    c = canvas.Canvas(packet, letter)
 
-    c.setFont('timesbd', 18)
-    c.drawString(400-(len(name)/2)*7.5, 315, name)
+    #Página 1
+    c.setFont('timesbd', 40)
+    c.drawString(280-(len(name)/2)*16.66, 385, name)
+    c.drawString(280-(len(dni)/2)*16.66, 335, dni)
+    c.showPage()
 
+    #Página 2
+    c.setFont('timesbd', 14)
+    c.drawString(190, 610, fecha_solicitud)
+    c.drawString(210, 556, name)
+    c.drawString(138, 528, dni)
+    c.drawString(142, 502, email)
+    c.drawString(160, 474, poblacion)
+    c.drawString(374, 474, ciudad)
+    c.drawString(180, 448, str(int(cp)))
+    c.drawString(160, 422, str(int(telefono)))
+
+    if(motivo=="inicial"):
+        c.drawString(131, 641, "X")
+    if(motivo=="renovacion"):
+        c.drawString(293, 641, "X")
+
+    if(basica):
+        c.drawString(530, 235, "X")
+    if(automatizacion):
+        c.drawString(530, 213, "X")
+    if(redes):
+        c.drawString(530, 191, "X")
+    if(riesgo):
+        c.drawString(530, 169, "X")
+    if(quirofano):
+        c.drawString(530, 148, "X")
+    if(lampara):
+        c.drawString(530, 126, "X")
+    if(generadora):
+        c.drawString(530, 103, "X")
+    
+    c.setFont('timesbd', 6)
+
+    if(situacion=="autonomo"):
+        c.drawString(255, 395, "X")
+    elif(situacion=="ajena"):    
+        c.drawString(350, 395, "X")
+    elif(situacion=="no trabaja" ):    
+        c.drawString(441, 395, "X")
+
+    if(prerrequisito=="experiencia"):
+        c.drawString(113, 340, "X")
+    elif(prerrequisito=="formacion"):
+        c.drawString(113, 313, "X")
+
+    c.showPage()
+
+    #Página 3
+    c.setFont('timesbd', 40)
+    c.drawString(280-(len(name)/2)*16.66, 385, name)
+    c.drawString(280-(len(dni)/2)*16.66, 335, dni)
+    c.showPage()
+
+    #Página 4
+    c.setFont('timesbd', 40)
+    c.drawString(280-(len(name)/2)*16.66, 385, name)
+    c.drawString(280-(len(dni)/2)*16.66, 335, dni)
     c.showPage()
     c.save()
 
@@ -34,12 +94,37 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     existing_pdf = PdfFileReader(open(original_pdf, "rb"))
     output = PdfFileWriter()
     
+    #Primera Página Editada 1, 2, 18, 20
     page = existing_pdf.pages[0]
     page.merge_page(new_pdf.pages[0])
     output.add_page(page)
-    page=existing_pdf.pages[1]
+
+    #Segunda Página Editada
+    page = existing_pdf.pages[1]
+    page.merge_page(new_pdf.pages[1])
     output.add_page(page)
+
+    for i in range (2, 17):
+        page=existing_pdf.pages[i]
+        output.add_page(page)
     
+    #Tercera Página Editada
+    page = existing_pdf.pages[17]
+    page.merge_page(new_pdf.pages[2])
+    output.add_page(page)
+
+    page=existing_pdf.pages[18]
+    output.add_page(page)
+
+    #Cuarta Página Editada
+    page = existing_pdf.pages[19]
+    page.merge_page(new_pdf.pages[3])
+    output.add_page(page)
+
+    for i in range (20, 22):
+        page=existing_pdf.pages[i]
+        output.add_page(page)
+
     new_pdf = os.path.join (files_folder, f"Solicitud {name}.pdf")
     output_stream = open(new_pdf, "wb")
     output.write(output_stream)
@@ -61,7 +146,9 @@ for i in range (2, hoja.nrows):
     print(hoja.cell_value(i, 15))
     print(hoja.cell_value(i, 16))
 
-    fecha_solicitud=hoja.cell_value(i, 1)
+    fecha_segementada=hoja.cell_value(i, 1).split(" del ")
+    fecha_solicitud=fecha_segementada[0]+"/"+fecha_segementada[1]+"/"+fecha_segementada[2]
+    print(fecha_solicitud)
     name=hoja.cell_value(i, 9)
     dni=hoja.cell_value(i, 10)
     email=hoja.cell_value(i, 11)
