@@ -13,7 +13,7 @@ files_folder = os.path.join (parent_folder, "files")
 data = os.path.join (files_folder, f"Data.xlsx")
 original_pdf = os.path.join (current_folder, f"solicitud.pdf")
 
-def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, prerrequisito, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora):
+def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, prerrequisito, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones):
     packet = io.BytesIO()
     # Fonts with epecific path
     pdfmetrics.registerFont(TTFont('times','times.ttf'))
@@ -75,15 +75,26 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     c.showPage()
 
     #Página 3
-    c.setFont('timesbd', 40)
-    c.drawString(280-(len(name)/2)*16.66, 385, name)
-    c.drawString(280-(len(dni)/2)*16.66, 335, dni)
+    c.setFont('timesbd', 14)
+    c.drawString(355, 293, dni)
+    c.drawString(208, 107, observaciones[:50])
+    c.drawString(53, 94, observaciones[51:128])
+    c.drawString(53, 80, observaciones[128:207])
     c.showPage()
 
     #Página 4
-    c.setFont('timesbd', 40)
-    c.drawString(280-(len(name)/2)*16.66, 385, name)
-    c.drawString(280-(len(dni)/2)*16.66, 335, dni)
+    c.setFont('timesbd', 14)
+    c.drawString(90, 718, name)
+    c.drawString(342, 520, fecha_solicitud)
+    c.drawString(342, 210, fecha_solicitud)
+    c.showPage()
+
+    #Página 5
+    c.setFont('timesbd', 14)
+    c.drawString(72, 736, name)
+    c.drawString(392, 736, dni)
+
+    
     c.showPage()
     c.save()
 
@@ -104,21 +115,29 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     page.merge_page(new_pdf.pages[1])
     output.add_page(page)
 
-    for i in range (2, 17):
+    page=existing_pdf.pages[2]
+    output.add_page(page)
+
+    #Tercera Página Editada
+    page = existing_pdf.pages[3]
+    page.merge_page(new_pdf.pages[2])
+    output.add_page(page)
+
+    for i in range (4, 17):
         page=existing_pdf.pages[i]
         output.add_page(page)
     
-    #Tercera Página Editada
+    #Cuarta Página Editada
     page = existing_pdf.pages[17]
-    page.merge_page(new_pdf.pages[2])
+    page.merge_page(new_pdf.pages[3])
     output.add_page(page)
 
     page=existing_pdf.pages[18]
     output.add_page(page)
 
-    #Cuarta Página Editada
+    #Quinta Página Editada
     page = existing_pdf.pages[19]
-    page.merge_page(new_pdf.pages[3])
+    page.merge_page(new_pdf.pages[4])
     output.add_page(page)
 
     for i in range (20, 22):
@@ -145,6 +164,7 @@ for i in range (2, hoja.nrows):
     print(hoja.cell_value(i, 14))
     print(hoja.cell_value(i, 15))
     print(hoja.cell_value(i, 16))
+    print(hoja.cell_value(i, 24))
 
     fecha_segementada=hoja.cell_value(i, 1).split(" del ")
     fecha_solicitud=fecha_segementada[0]+"/"+fecha_segementada[1]+"/"+fecha_segementada[2]
@@ -156,6 +176,7 @@ for i in range (2, hoja.nrows):
     ciudad=hoja.cell_value(i, 14)
     cp=hoja.cell_value(i, 15)
     telefono=hoja.cell_value(i, 16)
+    observaciones=hoja.cell_value(i, 24)
 
     if(hoja.cell_value(i, 2)=="SI"):
         print("Inicial")
@@ -221,6 +242,6 @@ for i in range (2, hoja.nrows):
         print("No Generadora")
         generadora=False    
     print("_______________________________")
-    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, prerrequisito, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora)
+    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, prerrequisito, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones)
 print("Documentos generados correctamente")    
 input()
