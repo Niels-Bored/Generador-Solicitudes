@@ -94,7 +94,22 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     c.drawString(72, 736, name)
     c.drawString(392, 736, dni)
 
-    
+    c.setFont('timesbd', 13)
+    if(basica):
+        c.drawString(49, 614, "X")
+    if(automatizacion):
+        c.drawString(129, 614, "X")
+    if(redes):
+        c.drawString(211, 614, "X")
+    if(riesgo):
+        c.drawString(292, 614, "X")
+    if(quirofano):
+        c.drawString(373, 614, "X")
+    if(lampara):
+        c.drawString(455, 614, "X")
+    if(generadora):
+        c.drawString(537, 614, "X")
+
     c.showPage()
     c.save()
 
