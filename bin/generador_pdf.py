@@ -13,7 +13,7 @@ files_folder = os.path.join (parent_folder, "files")
 data = os.path.join (files_folder, f"Data.xlsx")
 original_pdf = os.path.join (current_folder, f"solicitud.pdf")
 
-def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, prerrequisito, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones):
+def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite):
     packet = io.BytesIO()
     # Fonts with epecific path
     pdfmetrics.registerFont(TTFont('times','times.ttf'))
@@ -22,8 +22,9 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     c = canvas.Canvas(packet, letter)
 
     #Página 1
+    c.setFont('timesbd', 28)
+    c.drawString(290-(len(name)/2)*16.66, 385, name)
     c.setFont('timesbd', 40)
-    c.drawString(280-(len(name)/2)*16.66, 385, name)
     c.drawString(280-(len(dni)/2)*16.66, 335, dni)
     c.showPage()
 
@@ -43,20 +44,25 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     if(motivo=="renovacion"):
         c.drawString(293, 641, "X")
 
+    if(cumple):
+        c.drawString(113, 362, "X")
+
     if(basica):
-        c.drawString(530, 235, "X")
+        c.drawString(550, 262, "X")
     if(automatizacion):
-        c.drawString(530, 213, "X")
+        c.drawString(550, 240, "X")
     if(redes):
-        c.drawString(530, 191, "X")
+        c.drawString(550, 218, "X")
     if(riesgo):
-        c.drawString(530, 169, "X")
+        c.drawString(550, 193, "X")
     if(quirofano):
-        c.drawString(530, 148, "X")
+        c.drawString(550, 169, "X")
     if(lampara):
-        c.drawString(530, 126, "X")
+        c.drawString(550, 144, "X")
     if(generadora):
-        c.drawString(530, 103, "X")
+        c.drawString(550, 118, "X")
+    if(iite):
+        c.drawString(550, 93, "X")
     
     c.setFont('timesbd', 6)
 
@@ -67,48 +73,48 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     elif(situacion=="no trabaja" ):    
         c.drawString(441, 395, "X")
 
-    if(prerrequisito=="experiencia"):
-        c.drawString(113, 340, "X")
-    elif(prerrequisito=="formacion"):
-        c.drawString(113, 313, "X")
-
     c.showPage()
 
     #Página 3
-    c.setFont('timesbd', 14)
-    c.drawString(355, 293, dni)
-    c.drawString(208, 107, observaciones[:50])
-    c.drawString(53, 94, observaciones[51:128])
-    c.drawString(53, 80, observaciones[128:207])
+    c.setFont('timesbd', 13)
+    c.drawString(350, 423, dni)
+    c.drawString(53, 277, observaciones[:82])
+    c.drawString(53, 264, observaciones[82:165])
+    c.drawString(53, 250, observaciones[165:252])
     c.showPage()
 
     #Página 4
-    c.setFont('timesbd', 14)
+    c.setFont('timesbd', 10)
     c.drawString(90, 718, name)
     c.drawString(342, 520, fecha_solicitud)
     c.drawString(342, 210, fecha_solicitud)
     c.showPage()
 
     #Página 5
-    c.setFont('timesbd', 14)
+    c.setFont('timesbd', 10)
     c.drawString(72, 736, name)
     c.drawString(392, 736, dni)
 
-    c.setFont('timesbd', 13)
+    c.setFont('timesbd', 10)
+    if basica or automatizacion or redes or riesgo or quirofano or lampara or generadora or iite:
+        c.drawString(58, 675, "X")
+    if iite:
+        c.drawString(58, 577, "X")
+    c.setFont('timesbd', 12)
     if(basica):
-        c.drawString(49, 614, "X")
+        c.drawString(49, 613, "X")
     if(automatizacion):
-        c.drawString(129, 614, "X")
+        c.drawString(130, 613, "X")
     if(redes):
-        c.drawString(211, 614, "X")
+        c.drawString(212, 613, "X")
     if(riesgo):
-        c.drawString(292, 614, "X")
+        c.drawString(293, 613, "X")
     if(quirofano):
-        c.drawString(373, 614, "X")
+        c.drawString(374, 613, "X")
     if(lampara):
-        c.drawString(455, 614, "X")
+        c.drawString(455, 613, "X")
     if(generadora):
-        c.drawString(537, 614, "X")
+        c.drawString(537, 613, "X")
 
     c.showPage()
     c.save()
@@ -133,29 +139,32 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     page=existing_pdf.pages[2]
     output.add_page(page)
 
+    page=existing_pdf.pages[3]
+    output.add_page(page)
+
     #Tercera Página Editada
-    page = existing_pdf.pages[3]
+    page = existing_pdf.pages[4]
     page.merge_page(new_pdf.pages[2])
     output.add_page(page)
 
-    for i in range (4, 17):
+    for i in range (5, 18):
         page=existing_pdf.pages[i]
         output.add_page(page)
     
     #Cuarta Página Editada
-    page = existing_pdf.pages[17]
+    page = existing_pdf.pages[18]
     page.merge_page(new_pdf.pages[3])
     output.add_page(page)
 
-    page=existing_pdf.pages[18]
+    page=existing_pdf.pages[19]
     output.add_page(page)
 
     #Quinta Página Editada
-    page = existing_pdf.pages[19]
+    page = existing_pdf.pages[20]
     page.merge_page(new_pdf.pages[4])
     output.add_page(page)
 
-    for i in range (20, 22):
+    for i in range (21, 23):
         page=existing_pdf.pages[i]
         output.add_page(page)
 
@@ -191,7 +200,7 @@ for i in range (2, hoja.nrows):
     ciudad=hoja.cell_value(i, 14)
     cp=hoja.cell_value(i, 15)
     telefono=hoja.cell_value(i, 16)
-    observaciones=hoja.cell_value(i, 24)
+    observaciones=hoja.cell_value(i, 25)
 
     if(hoja.cell_value(i, 2)=="SI"):
         print("Inicial")
@@ -199,12 +208,12 @@ for i in range (2, hoja.nrows):
     if(hoja.cell_value(i, 3)=="SI"):
         print("Renovacion")
         motivo="renovacion"
-    if(hoja.cell_value(i, 4)=="SI"):
-        print("Experiencia")
-        prerrequisito="experiencia"
-    if(hoja.cell_value(i, 5)=="SI"):
-        print("Formacion")         
-        prerrequisito="formacion"
+    if(hoja.cell_value(i, 4)=="X"):
+        print("Cumple")
+        cumple = True
+    else:
+        print("No Cumple")
+        cumple = False
     if(hoja.cell_value(i, 6)=="SI"):
         print("Autonomo")
         situacion="autonomo"
@@ -254,9 +263,14 @@ for i in range (2, hoja.nrows):
         print("Generadora")
         generadora=True
     else:
-        print("No Generadora")
-        generadora=False    
+        generadora=False   
+    if(hoja.cell_value(i, 24)=="SI"):
+        print("IITE")
+        iite=True
+    else:
+        print("No IITE")
+        iite=False    
     print("_______________________________")
-    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, prerrequisito, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones)
+    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite)
 print("Documentos generados correctamente")    
 input()
