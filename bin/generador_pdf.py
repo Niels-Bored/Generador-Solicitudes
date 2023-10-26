@@ -164,7 +164,7 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     page.merge_page(new_pdf.pages[4])
     output.add_page(page)
 
-    for i in range (21, 23):
+    for i in range (21, 24):
         page=existing_pdf.pages[i]
         output.add_page(page)
 
