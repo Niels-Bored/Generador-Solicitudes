@@ -13,7 +13,7 @@ files_folder = os.path.join (parent_folder, "files")
 data = os.path.join (files_folder, f"Data.xlsx")
 original_pdf = os.path.join (current_folder, f"solicitud.pdf")
 
-def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite):
+def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro):
     packet = io.BytesIO()
     # Fonts with epecific path
     pdfmetrics.registerFont(TTFont('times','times.ttf'))
@@ -67,11 +67,9 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     c.setFont('timesbd', 6)
 
     if(situacion=="autonomo"):
-        c.drawString(255, 395, "X")
+        c.drawString(333, 395, "X")
     elif(situacion=="ajena"):    
-        c.drawString(350, 395, "X")
-    elif(situacion=="no trabaja" ):    
-        c.drawString(441, 395, "X")
+        c.drawString(416, 395, "X")
 
     c.showPage()
 
@@ -81,6 +79,12 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     c.drawString(53, 277, observaciones[:82])
     c.drawString(53, 264, observaciones[82:165])
     c.drawString(53, 250, observaciones[165:252])
+    
+    if(situacion=="no trabaja"):
+        c.setFont('timesbd', 7)
+        c.drawString(21, 199, "X")
+        c.setFont('timesbd', 12)
+        c.drawString(180, 170, centro.lower())
     c.showPage()
 
     #Página 4
@@ -188,19 +192,21 @@ for i in range (2, hoja.nrows):
     print(hoja.cell_value(i, 14))
     print(hoja.cell_value(i, 15))
     print(hoja.cell_value(i, 16))
-    print(hoja.cell_value(i, 24))
+    print(hoja.cell_value(i, 17))
+    print(hoja.cell_value(i, 25))
 
     fecha_segementada=hoja.cell_value(i, 1).split(" del ")
     fecha_solicitud=fecha_segementada[0]+"/"+fecha_segementada[1]+"/"+fecha_segementada[2]
     print(fecha_solicitud)
-    name=hoja.cell_value(i, 9)
-    dni=hoja.cell_value(i, 10)
-    email=hoja.cell_value(i, 11)
-    poblacion=hoja.cell_value(i, 13)
-    ciudad=hoja.cell_value(i, 14)
-    cp=hoja.cell_value(i, 15)
-    telefono=hoja.cell_value(i, 16)
-    observaciones=hoja.cell_value(i, 25)
+    centro=hoja.cell_value(i, 9)
+    name=hoja.cell_value(i, 10)
+    dni=hoja.cell_value(i, 11)
+    email=hoja.cell_value(i, 12)
+    poblacion=hoja.cell_value(i, 14)
+    ciudad=hoja.cell_value(i, 15)
+    cp=hoja.cell_value(i, 16)
+    telefono=hoja.cell_value(i, 17)
+    observaciones=hoja.cell_value(i, 26)
 
     if(hoja.cell_value(i, 2)=="SI"):
         print("Inicial")
@@ -220,57 +226,57 @@ for i in range (2, hoja.nrows):
     if(hoja.cell_value(i, 7)=="SI"):
         print("Ajena")
         situacion="ajena"
-    if(hoja.cell_value(i, 8)=="SI"):
-        print("No trabaja")         
+    if(hoja.cell_value(i, 8)=="Si"):
+        print("Autoriza")         
         situacion="no trabaja" 
-    if(hoja.cell_value(i, 17)=="SI"):
+    if(hoja.cell_value(i, 18)=="SI"):
         print("Basica")
         basica=True
     else:
         print("No Basica")
         basica=False    
-    if(hoja.cell_value(i, 18)=="SI"):
+    if(hoja.cell_value(i, 19)=="SI"):
         print("Automatizacion")
         automatizacion=True
     else:
         print("No Automatizacion")
         automatizacion=False 
-    if(hoja.cell_value(i, 19)=="SI"):
+    if(hoja.cell_value(i, 20)=="SI"):
         print("Redes")
         redes=True
     else:
         print("No Redes")
         redes=False 
-    if(hoja.cell_value(i, 20)=="SI"):
+    if(hoja.cell_value(i, 21)=="SI"):
         print("Riesgo")
         riesgo=True
     else:
         print("No Riesgo")
         riesgo=False 
-    if(hoja.cell_value(i, 21)=="SI"):
+    if(hoja.cell_value(i, 22)=="SI"):
         print("Quirofano")
         quirofano=True
     else:
         print("No Quirofano")
         quirofano=False 
-    if(hoja.cell_value(i, 22)=="SI"):
+    if(hoja.cell_value(i, 23)=="SI"):
         print("Lampara")
         lampara=True
     else:
         print("No Lampara")
         lampara=False 
-    if(hoja.cell_value(i, 23)=="SI"):
+    if(hoja.cell_value(i, 24)=="SI"):
         print("Generadora")
         generadora=True
     else:
         generadora=False   
-    if(hoja.cell_value(i, 24)=="SI"):
+    if(hoja.cell_value(i, 25)=="SI"):
         print("IITE")
         iite=True
     else:
         print("No IITE")
         iite=False    
     print("_______________________________")
-    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite)
+    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro)
 print("Documentos generados correctamente")    
 input()
