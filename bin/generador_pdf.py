@@ -13,7 +13,7 @@ files_folder = os.path.join (parent_folder, "files")
 data = os.path.join (files_folder, f"Data.xlsx")
 original_pdf = os.path.join (current_folder, f"solicitud.pdf")
 
-def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro):
+def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro, autoriza):
     packet = io.BytesIO()
     # Fonts with epecific path
     pdfmetrics.registerFont(TTFont('times','times.ttf'))
@@ -68,7 +68,7 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
 
     if(situacion=="autonomo"):
         c.drawString(333, 395, "X")
-    elif(situacion=="ajena"):    
+    if(situacion=="ajena"):    
         c.drawString(416, 395, "X")
 
     c.showPage()
@@ -80,11 +80,11 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     c.drawString(53, 264, observaciones[82:165])
     c.drawString(53, 250, observaciones[165:252])
     
-    if(situacion=="no trabaja"):
+    if(autoriza=="no trabaja"):
         c.setFont('timesbd', 7)
         c.drawString(21, 199, "X")
         c.setFont('timesbd', 12)
-        c.drawString(180, 170, centro.lower())
+        c.drawString(180, 170, centro)
     c.showPage()
 
     #Página 4
@@ -228,7 +228,10 @@ for i in range (2, hoja.nrows):
         situacion="ajena"
     if(hoja.cell_value(i, 8)=="Si"):
         print("Autoriza")         
-        situacion="no trabaja" 
+        autoriza="no trabaja"
+    else:
+        print("No autoriza")         
+        autoriza="no" 
     if(hoja.cell_value(i, 18)=="SI"):
         print("Basica")
         basica=True
@@ -275,8 +278,8 @@ for i in range (2, hoja.nrows):
         iite=True
     else:
         print("No IITE")
-        iite=False    
+        iite=False 
     print("_______________________________")
-    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro)
+    generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro, autoriza)
 print("Documentos generados correctamente")    
 input()
