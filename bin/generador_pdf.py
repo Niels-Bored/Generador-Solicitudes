@@ -76,9 +76,9 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     #Página 3
     c.setFont('timesbd', 13)
     c.drawString(350, 423, dni)
-    c.drawString(53, 277, observaciones[:82])
-    c.drawString(53, 264, observaciones[82:165])
-    c.drawString(53, 250, observaciones[165:252])
+    c.drawString(54, 285, observaciones[:82])
+    c.drawString(54, 272, observaciones[82:165])
+    c.drawString(54, 258, observaciones[165:252])
     
     if(autoriza=="no trabaja"):
         c.setFont('timesbd', 7)
@@ -100,7 +100,7 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     c.drawString(392, 736, dni)
 
     c.setFont('timesbd', 10)
-    if basica or automatizacion or redes or riesgo or quirofano or lampara or generadora or iite:
+    if basica or automatizacion or redes or riesgo or quirofano or lampara or generadora:
         c.drawString(58, 675, "X")
     if iite:
         c.drawString(58, 577, "X")
