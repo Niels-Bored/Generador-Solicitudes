@@ -45,24 +45,27 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
         c.drawString(293, 641, "X")
 
     if(cumple):
-        c.drawString(113, 362, "X")
-
+        c.setFont('timesbd', 12)
+        c.drawString(113, 390, "X")
+    
+    c.setFont('timesbd', 7)
+    
     if(basica):
-        c.drawString(550, 262, "X")
+        c.drawString(552, 217, "X")
     if(automatizacion):
-        c.drawString(550, 240, "X")
+        c.drawString(552, 197, "X")
     if(redes):
-        c.drawString(550, 218, "X")
+        c.drawString(552, 179, "X")
     if(riesgo):
-        c.drawString(550, 193, "X")
+        c.drawString(552, 165, "X")
     if(quirofano):
-        c.drawString(550, 169, "X")
+        c.drawString(552, 151, "X")
     if(lampara):
-        c.drawString(550, 144, "X")
+        c.drawString(552, 131, "X")
     if(generadora):
-        c.drawString(550, 118, "X")
+        c.drawString(552, 107, "X")
     if(iite):
-        c.drawString(550, 93, "X")
+        c.drawString(552, 87, "X")
     
     c.setFont('timesbd', 6)
 
@@ -75,16 +78,16 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
 
     #Página 3
     c.setFont('timesbd', 13)
-    c.drawString(350, 423, dni)
-    c.drawString(54, 285, observaciones[:82])
-    c.drawString(54, 272, observaciones[82:165])
-    c.drawString(54, 258, observaciones[165:252])
+    c.drawString(350, 505, dni)
+    c.drawString(54, 399, observaciones[:82])
+    c.drawString(54, 385, observaciones[82:165])
+    c.drawString(54, 371, observaciones[165:252])
     
     if(autoriza=="no trabaja"):
         c.setFont('timesbd', 7)
-        c.drawString(21, 199, "X")
+        c.drawString(21, 331, "X")
         c.setFont('timesbd', 12)
-        c.drawString(180, 170, centro)
+        c.drawString(180, 301, centro)
     c.showPage()
 
     #Página 4
@@ -151,24 +154,24 @@ def generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp
     page.merge_page(new_pdf.pages[2])
     output.add_page(page)
 
-    for i in range (5, 18):
+    for i in range (5, 20):
         page=existing_pdf.pages[i]
         output.add_page(page)
     
     #Cuarta Página Editada
-    page = existing_pdf.pages[18]
+    page = existing_pdf.pages[20]
     page.merge_page(new_pdf.pages[3])
     output.add_page(page)
 
-    page=existing_pdf.pages[19]
+    page=existing_pdf.pages[21]
     output.add_page(page)
 
     #Quinta Página Editada
-    page = existing_pdf.pages[20]
+    page = existing_pdf.pages[22]
     page.merge_page(new_pdf.pages[4])
     output.add_page(page)
 
-    for i in range (21, 24):
+    for i in range (23, 26):
         page=existing_pdf.pages[i]
         output.add_page(page)
 
@@ -282,4 +285,4 @@ for i in range (2, hoja.nrows):
     print("_______________________________")
     generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro, autoriza)
 print("Documentos generados correctamente")    
-input()
+#input()
