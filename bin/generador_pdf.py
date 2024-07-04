@@ -6,6 +6,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from datetime import datetime, timedelta
 
 current_folder = os.path.dirname (__file__)
 parent_folder = os.path.dirname (current_folder)
@@ -196,20 +197,27 @@ for i in range (2, hoja.nrows):
     print(hoja.cell_value(i, 15))
     print(hoja.cell_value(i, 16))
     print(hoja.cell_value(i, 17))
-    print(hoja.cell_value(i, 25))
+    print(hoja.cell_value(i, 26))
 
-    fecha_segementada=hoja.cell_value(i, 1).split(" del ")
-    fecha_solicitud=fecha_segementada[0]+"/"+fecha_segementada[1]+"/"+fecha_segementada[2]
+    #fecha_segementada=hoja.cell_value(i, 1).split(" del ")
+    #fecha_solicitud=fecha_segementada[0]+"/"+fecha_segementada[1]+"/"+fecha_segementada[2]
+    try:
+        fecha_solicitud = datetime(1899, 12, 30) + timedelta(days=hoja.cell_value(i, 1))
+        fecha_solicitud = str(fecha_solicitud).split(" ")[0]
+        fecha_solicitud = fecha_solicitud.split("-")[2] + "/" + fecha_solicitud.split("-")[1] + "/" + fecha_solicitud.split("-")[0].replace("20", "")
+    except:
+        fecha_solicitud = hoja.cell_value(i, 1)
+
     print(fecha_solicitud)
     centro=hoja.cell_value(i, 9)
-    name=hoja.cell_value(i, 10)
-    dni=hoja.cell_value(i, 11)
-    email=hoja.cell_value(i, 12)
-    poblacion=hoja.cell_value(i, 14)
-    ciudad=hoja.cell_value(i, 15)
-    cp=hoja.cell_value(i, 16)
-    telefono=hoja.cell_value(i, 17)
-    observaciones=hoja.cell_value(i, 26)
+    name=hoja.cell_value(i, 10) +" "+ hoja.cell_value(i, 11)
+    dni=hoja.cell_value(i, 12)
+    email=hoja.cell_value(i, 13)
+    poblacion=hoja.cell_value(i, 15)
+    ciudad=hoja.cell_value(i, 16)
+    cp=hoja.cell_value(i, 17)
+    telefono=hoja.cell_value(i, 18)
+    observaciones=hoja.cell_value(i, 27)
 
     if(hoja.cell_value(i, 2)=="SI"):
         print("Inicial")
