@@ -243,48 +243,48 @@ for i in range (2, hoja.nrows):
     else:
         print("No autoriza")         
         autoriza="no" 
-    if(hoja.cell_value(i, 18)=="SI"):
+    if(hoja.cell_value(i, 19)=="SI"):
         print("Basica")
         basica=True
     else:
         print("No Basica")
         basica=False    
-    if(hoja.cell_value(i, 19)=="SI"):
+    if(hoja.cell_value(i, 20)=="SI"):
         print("Automatizacion")
         automatizacion=True
     else:
         print("No Automatizacion")
         automatizacion=False 
-    if(hoja.cell_value(i, 20)=="SI"):
+    if(hoja.cell_value(i, 21)=="SI"):
         print("Redes")
         redes=True
     else:
         print("No Redes")
         redes=False 
-    if(hoja.cell_value(i, 21)=="SI"):
+    if(hoja.cell_value(i, 22)=="SI"):
         print("Riesgo")
         riesgo=True
     else:
         print("No Riesgo")
         riesgo=False 
-    if(hoja.cell_value(i, 22)=="SI"):
+    if(hoja.cell_value(i, 23)=="SI"):
         print("Quirofano")
         quirofano=True
     else:
         print("No Quirofano")
         quirofano=False 
-    if(hoja.cell_value(i, 23)=="SI"):
+    if(hoja.cell_value(i, 24)=="SI"):
         print("Lampara")
         lampara=True
     else:
         print("No Lampara")
         lampara=False 
-    if(hoja.cell_value(i, 24)=="SI"):
+    if(hoja.cell_value(i, 25)=="SI"):
         print("Generadora")
         generadora=True
     else:
         generadora=False   
-    if(hoja.cell_value(i, 25)=="SI"):
+    if(hoja.cell_value(i, 26)=="SI"):
         print("IITE")
         iite=True
     else:
@@ -293,4 +293,4 @@ for i in range (2, hoja.nrows):
     print("_______________________________")
     generatePDF(name, dni, motivo, fecha_solicitud, email, poblacion, ciudad, cp, telefono, situacion, cumple, basica, automatizacion, redes, riesgo, quirofano, lampara, generadora, observaciones, iite, centro, autoriza)
 print("Documentos generados correctamente")    
-#input()
+input()
